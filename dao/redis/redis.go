@@ -1,9 +1,9 @@
 package redis
 
 import (
+	"bluebell/settings"
 	"fmt"
 	"github.com/go-redis/redis"
-	"web_app/settings"
 )
 
 // 声明一个全局的rdb变量

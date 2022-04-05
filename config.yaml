@@ -1,7 +1,8 @@
-app:
-  name: "bluebell"
-  mode: "dev"
-  port: 8081
+name: "bluebell"
+mode: "dev"
+port: 8080
+start_time: "2022-01-01"
+machine_id: 1
 
 log:
   level: "debug"
@@ -11,11 +12,11 @@ log:
   max_backups: 7
 
 mysql:
-  host: "127.0.0.1"
+  host: "rm-2ze4kp1x07f9638t9uo.mysql.rds.aliyuncs.com"
   port: 3306
   user: "root"
-  password: "root"
-  db_name: "test"
+  password: "zhaoBIN138"
+  db_name: "bluebell"
   max_conns: 200
   max_idle_conns: 50
 
