@@ -19,6 +19,7 @@ type AppConfig struct {
 	*LogConfig   `mapstructure:"log"`
 	*MySQLConfig `mapstructure:"mysql"`
 	*RedisConfig `mapstructure:"redis"`
+	*Auth        `mapstructure:"auth"`
 }
 
 type LogConfig struct {
@@ -45,6 +46,10 @@ type RedisConfig struct {
 	Port     int    `mapstructure:"port"`
 	DB       int    `mapstructure:"db"`
 	PoolSize int    `mapstructure:"pool_size"`
+}
+
+type Auth struct {
+	JwtExpire int `mapstructure:"jwt_expire"`
 }
 
 func Init() (err error) {

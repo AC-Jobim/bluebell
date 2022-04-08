@@ -1,9 +1,10 @@
 package middlewares
 
 import (
-	"bluebell/controllers"
+	"bluebell/controller"
 	"bluebell/pkg/jwt"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 	"strings"
 )
 
@@ -15,26 +16,27 @@ func JWTAuthMiddleware() func(c *gin.Context) {
 		// 这里的具体实现方式要依据你的实际业务情况决定
 		authHeader := c.Request.Header.Get("Authorization")
 		if authHeader == "" {
-			controllers.ResponseError(c, controllers.CodeNeedLogin)
+			controller.ResponseError(c, controller.CodeNeedLogin)
 			c.Abort()
 			return
 		}
 		// 按空格分割
 		parts := strings.SplitN(authHeader, " ", 2)
 		if !(len(parts) == 2 && parts[0] == "Bearer") {
-			controllers.ResponseError(c, controllers.CoderInvalidToken)
+			controller.ResponseError(c, controller.CoderInvalidToken)
 			c.Abort()
 			return
 		}
 		// parts[1]是获取到的tokenString，我们使用之前定义好的解析JWT的函数来解析它
 		mc, err := jwt.ParseToken(parts[1])
 		if err != nil {
-			controllers.ResponseError(c, controllers.CoderInvalidToken)
+			zap.L().Error("error", zap.Error(err))
+			controller.ResponseError(c, controller.CoderInvalidToken)
 			c.Abort()
 			return
 		}
 		// 将当前请求的userID、username信息保存到请求的上下文c上
-		c.Set(controllers.ContextUserIDKey, mc.UserID)
+		c.Set(controller.ContextUserIDKey, mc.UserID)
 		c.Next() // 后续的处理函数可以用过c.Get("username")来获取当前请求的用户信息
 	}
 }

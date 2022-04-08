@@ -1,7 +1,7 @@
-package routers
+package router
 
 import (
-	"bluebell/controllers"
+	"bluebell/controller"
 	"bluebell/logger"
 	"bluebell/middlewares"
 	"bluebell/pkg/snowflake"
@@ -18,13 +18,27 @@ func SetupRouter(mode string) *gin.Engine {
 	r := gin.New()
 	r.Use(logger.GinLogger(), logger.GinRecovery(true))
 
+	v1 := r.Group("api/v1")
+
 	//注册业务路由
-	r.POST("/signup", controllers.SignUpHandler)
-	r.POST("/login", controllers.LoginHandler)
+	v1.POST("/signup", controller.SignUpHandler)
+	// 登陆
+	v1.POST("/login", controller.LoginHandler)
+
+	//v1使用中间件,使用中间件的方法的集合...
+	v1.Use(middlewares.JWTAuthMiddleware())
+	{
+		v1.GET("/community", controller.CommunityHandler)
+		v1.GET("/community/:id", controller.CommunityDetailHandler)
+
+		v1.POST("/post", controller.CreatePostHandler)
+		v1.GET("/post/:id", controller.GetPostDetailHandler)
+		v1.GET("/posts/", controller.GetPostListHandler)
+	}
 
 	r.GET("/ping", middlewares.JWTAuthMiddleware(), func(c *gin.Context) {
 
-		fmt.Println(controllers.GetCurrentUser(c))
+		fmt.Println(controller.GetCurrentUserID(c))
 		c.String(http.StatusOK, "success")
 	})
 

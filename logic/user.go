@@ -23,15 +23,20 @@ func SignUp(p *models.ParamSignUp) error {
 	return mysql.InsertUser(user)
 }
 
-func Login(p *models.ParamLogin) (token string, err error) {
-	user := &models.User{
+func Login(p *models.ParamLogin) (user *models.User, err error) {
+	user = &models.User{
 		Username: p.Username,
 		Password: p.Password,
 	}
 	// 传递的是指针,可以拿到user.userID
 	if err := mysql.Login(user); err != nil {
 		// 登陆失败
-		return "", err
+		return nil, err
 	}
-	return jwt.GenToken(user.UserID, user.Username)
+	token, err := jwt.GenToken(user.UserID, user.Username)
+	if err != nil {
+		return nil, err
+	}
+	user.Token = token
+	return
 }

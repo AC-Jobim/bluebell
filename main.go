@@ -1,12 +1,12 @@
 package main
 
 import (
-	"bluebell/controllers"
+	"bluebell/controller"
 	"bluebell/dao/mysql"
 	"bluebell/dao/redis"
 	"bluebell/logger"
 	"bluebell/pkg/snowflake"
-	"bluebell/routers"
+	"bluebell/router"
 	"bluebell/settings"
 	"fmt"
 	"go.uber.org/zap"
@@ -42,13 +42,13 @@ func main() {
 	}
 
 	// 初始化gin框架内置的校验器使用的翻译器
-	if err := controllers.InitTrans("zh"); err != nil {
+	if err := controller.InitTrans("zh"); err != nil {
 		fmt.Printf("init trans failed, err:%v\n", err)
 		return
 	}
 
 	// 5.注册路由
-	r := routers.SetupRouter(settings.Conf.Mode)
+	r := router.SetupRouter(settings.Conf.Mode)
 	err := r.Run(fmt.Sprintf(":%d", settings.Conf.Port))
 	if err != nil {
 		fmt.Printf("run server failed, err:%v\n", err)
