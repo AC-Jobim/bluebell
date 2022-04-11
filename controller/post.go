@@ -24,7 +24,7 @@ func CreatePostHandler(c *gin.Context) {
 		return
 	}
 	//从c.content里面取到当前用户的ID值
-	userID, err := GetCurrentUserID(c)
+	userID, err := getCurrentUserID(c)
 	if err != nil {
 		ResponseError(c, CodeNeedLogin)
 		return

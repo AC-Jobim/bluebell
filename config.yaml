@@ -25,7 +25,7 @@ mysql:
 
 redis:
   host: "101.200.241.73"
-  port: 6379
+  port: 16379
   db: 0
-  password: ""
+  password: "ZHAOBIN138"
   pool_size: 100

@@ -3,6 +3,7 @@ package jwt
 import (
 	"fmt"
 	"testing"
+	"time"
 )
 
 func TestGenToken(t *testing.T) {
@@ -11,4 +12,9 @@ func TestGenToken(t *testing.T) {
 	//解析token
 	claims, _ := ParseToken(token)
 	fmt.Println(claims)
+}
+
+func TestMy(t *testing.T) {
+	fmt.Println(time.Now())
+	fmt.Println(time.Now().Unix())
 }

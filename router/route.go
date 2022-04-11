@@ -5,7 +5,6 @@ import (
 	"bluebell/logger"
 	"bluebell/middlewares"
 	"bluebell/pkg/snowflake"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -34,11 +33,13 @@ func SetupRouter(mode string) *gin.Engine {
 		v1.POST("/post", controller.CreatePostHandler)
 		v1.GET("/post/:id", controller.GetPostDetailHandler)
 		v1.GET("/posts/", controller.GetPostListHandler)
+
+		// 投票功能实现
+		v1.POST("/vote", controller.PostVoteController)
 	}
 
 	r.GET("/ping", middlewares.JWTAuthMiddleware(), func(c *gin.Context) {
 
-		fmt.Println(controller.GetCurrentUserID(c))
 		c.String(http.StatusOK, "success")
 	})
 
