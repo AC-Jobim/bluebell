@@ -286,3 +286,21 @@
 {"level":"ERROR","time":"2022-04-11T16:43:24.676+0800","caller":"controller/vote.go:42","msg":" logic.VoteForPost","error":"不允许重复投票"}
 {"level":"INFO","time":"2022-04-11T16:43:24.677+0800","caller":"logger/logger.go:82","msg":"/api/v1/vote","status":200,"method":"POST","path":"/api/v1/vote","query":"","ip":"::1","user-agent":"PostmanRuntime/7.28.4","errors":"","cost":0.0430101}
 {"level":"INFO","time":"2022-04-11T17:06:00.428+0800","caller":"logger/logger.go:82","msg":"/api/v1/posts/","status":200,"method":"GET","path":"/api/v1/posts/","query":"","ip":"::1","user-agent":"PostmanRuntime/7.28.4","errors":"","cost":0.2070461}
+{"level":"ERROR","time":"2022-04-11T19:22:54.697+0800","caller":"controller/post.go:106","msg":"logic.GetPostList2() failed","error":"sql: converting argument $1 type: unsupported type []interface {}, a slice of interface"}
+{"level":"INFO","time":"2022-04-11T19:22:54.699+0800","caller":"logger/logger.go:82","msg":"/api/v1/posts/","status":200,"method":"GET","path":"/api/v1/posts/","query":"","ip":"::1","user-agent":"PostmanRuntime/7.28.4","errors":"","cost":0.026006}
+{"level":"INFO","time":"2022-04-11T19:28:06.822+0800","caller":"logger/logger.go:82","msg":"/api/v1/posts/","status":200,"method":"GET","path":"/api/v1/posts/","query":"","ip":"::1","user-agent":"PostmanRuntime/7.28.4","errors":"","cost":0.2000611}
+{"level":"DEBUG","time":"2022-04-12T15:43:17.441+0800","caller":"logic/post.go:113","msg":"GetPostList2","id情况":["36367078856331264","36367007796432896"]}
+{"level":"DEBUG","time":"2022-04-12T15:43:17.442+0800","caller":"logic/post.go:114","msg":"GetPostList2","投票情况":[0,1]}
+{"level":"INFO","time":"2022-04-12T15:43:17.587+0800","caller":"logger/logger.go:82","msg":"/api/v1/posts/","status":200,"method":"GET","path":"/api/v1/posts/","query":"","ip":"::1","user-agent":"PostmanRuntime/7.28.4","errors":"","cost":0.2250507}
+{"level":"ERROR","time":"2022-04-12T15:44:33.106+0800","caller":"redis/vote.go:46","msg":"vote.go","error":"strconv.ParseFloat: parsing \"\": invalid syntax"}
+{"level":"INFO","time":"2022-04-12T15:44:33.127+0800","caller":"logger/logger.go:82","msg":"/api/v1/vote","status":200,"method":"POST","path":"/api/v1/vote","query":"","ip":"::1","user-agent":"PostmanRuntime/7.28.4","errors":"","cost":0.0640141}
+{"level":"DEBUG","time":"2022-04-12T15:44:35.694+0800","caller":"logic/post.go:113","msg":"GetPostList2","id情况":["36367078856331264","36367007796432896"]}
+{"level":"DEBUG","time":"2022-04-12T15:44:35.694+0800","caller":"logic/post.go:114","msg":"GetPostList2","投票情况":[1,1]}
+{"level":"INFO","time":"2022-04-12T15:44:35.838+0800","caller":"logger/logger.go:82","msg":"/api/v1/posts/","status":200,"method":"GET","path":"/api/v1/posts/","query":"","ip":"::1","user-agent":"PostmanRuntime/7.28.4","errors":"","cost":0.223049}
+{"level":"INFO","time":"2022-04-12T15:44:47.834+0800","caller":"logger/logger.go:82","msg":"/api/v1/vote","status":200,"method":"POST","path":"/api/v1/vote","query":"","ip":"::1","user-agent":"PostmanRuntime/7.28.4","errors":"","cost":0.0630308}
+{"level":"DEBUG","time":"2022-04-12T15:44:50.314+0800","caller":"logic/post.go:113","msg":"GetPostList2","id情况":["36367078856331264","36367007796432896"]}
+{"level":"DEBUG","time":"2022-04-12T15:44:50.315+0800","caller":"logic/post.go:114","msg":"GetPostList2","投票情况":[0,1]}
+{"level":"INFO","time":"2022-04-12T15:44:50.458+0800","caller":"logger/logger.go:82","msg":"/api/v1/posts/","status":200,"method":"GET","path":"/api/v1/posts/","query":"","ip":"::1","user-agent":"PostmanRuntime/7.28.4","errors":"","cost":0.22205}
+{"level":"DEBUG","time":"2022-04-12T15:45:23.996+0800","caller":"logic/post.go:113","msg":"GetPostList2","id情况":["36367078856331264","36367007796432896"]}
+{"level":"DEBUG","time":"2022-04-12T15:45:23.997+0800","caller":"logic/post.go:114","msg":"GetPostList2","投票情况":[-1,1]}
+{"level":"INFO","time":"2022-04-12T15:45:24.144+0800","caller":"logger/logger.go:82","msg":"/api/v1/posts/","status":200,"method":"GET","path":"/api/v1/posts/","query":"","ip":"::1","user-agent":"PostmanRuntime/7.28.4","errors":"","cost":0.2280504}

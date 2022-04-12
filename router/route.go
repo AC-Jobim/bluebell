@@ -32,7 +32,9 @@ func SetupRouter(mode string) *gin.Engine {
 
 		v1.POST("/post", controller.CreatePostHandler)
 		v1.GET("/post/:id", controller.GetPostDetailHandler)
-		v1.GET("/posts/", controller.GetPostListHandler)
+
+		// 查询帖子升级版
+		v1.GET("/posts/", controller.GetPostListHandler2)
 
 		// 投票功能实现
 		v1.POST("/vote", controller.PostVoteController)

@@ -91,3 +91,31 @@ func CreatePost(postId int64) (err error) {
 	_, err = pipeline.Exec()
 	return
 }
+
+// GetPostVoteData 根据ids查询每篇帖子的投赞成票的数据
+func GetPostVoteData(ids []string) (data []int64, err error) {
+	// 使用pipeline一次发送多条命令，减少RTT
+	pipeline := rdb.Pipeline()
+	for _, id := range ids {
+		key := getRedisKey(KeyPostVotedHashPrefix + id)
+		pipeline.HVals(key)
+	}
+	cmders, _ := pipeline.Exec()
+	if err != nil {
+		return nil, err
+	}
+	data = make([]int64, 0, len(cmders))
+	for _, cmder := range cmders {
+		vales := cmder.(*redis.StringSliceCmd).Val()
+		var count int64 = 0
+		for _, val := range vales {
+			if val == "1" {
+				count++
+			} else if val == "-1" {
+				count--
+			}
+		}
+		data = append(data, count)
+	}
+	return
+}
