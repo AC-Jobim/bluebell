@@ -78,7 +78,7 @@ func GetPostListHandler(c *gin.Context) {
 	ResponseSuccess(c, data)
 }
 
-// GetPostListHandler2 根据时间查询所有帖子 V2
+// GetPostListHandlerV2 根据时间或者分数查询所有帖子 V2
 /*
 	- 根据前端传来的参数动态的获取帖子列表
 	- 按创建时间排序 或者 按照 分数排序
@@ -86,7 +86,7 @@ func GetPostListHandler(c *gin.Context) {
 		2.去redis查询id列表
 		3.根据id去数据库查询帖子详细信息
 */
-func GetPostListHandler2(c *gin.Context) {
+func GetPostListHandlerV2(c *gin.Context) {
 
 	// 初始化结构体时指定初始参数
 	p := &models.ParamPostList{
@@ -99,8 +99,9 @@ func GetPostListHandler2(c *gin.Context) {
 		ResponseError(c, CodeInvalidParam)
 		return
 	}
-
-	data, err := logic.GetPostList2(p)
+	zap.L().Debug("GetPostListHandlerV2", zap.Any("查询帖子列表参数", p))
+	// 进行逻辑判断，判断是否根据社区查询帖子列表，从而调用不同的方法
+	data, err := logic.GetPostListNew(p)
 
 	if err != nil {
 		zap.L().Error("logic.GetPostList2() failed", zap.Error(err))

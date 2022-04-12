@@ -22,10 +22,11 @@ func CreatePost(p *models.Post) (err error) {
 	if err != nil {
 		return
 	}
-	err = redis.CreatePost(p.ID)
+	err = redis.CreatePost(p.ID, p.CommunityID)
 	return
 }
 
+// GetPostById 根据id查看帖子详情数据
 func GetPostById(pid int64) (data *models.ApiPostDetail, error error) {
 
 	//查询数据的基础信息
@@ -56,6 +57,7 @@ func GetPostById(pid int64) (data *models.ApiPostDetail, error error) {
 	return
 }
 
+// GetPostList 获取帖子数据，单纯的分页查询
 func GetPostList(page int64, size int64) (data []*models.ApiPostDetail, err error) {
 	posts, err := mysql.GetPostList(page, size)
 	if err != nil {
@@ -90,8 +92,29 @@ func GetPostList(page int64, size int64) (data []*models.ApiPostDetail, err erro
 	return
 }
 
-func GetPostList2(p *models.ParamPostList) (data []*models.ApiPostDetail, err error) {
-	// 2.去redis查询id列表
+// GetPostListNew 进行逻辑判断，判断是否根据社区查询帖子列表
+func GetPostListNew(p *models.ParamPostList) (data []*models.ApiPostDetail, err error) {
+	// 根据请求参数的不同，执行不同的逻辑
+	if p.CommunityID == 0 {
+		// 查所有
+		zap.L().Info("查询所有的帖子列表")
+		data, err = GetPostListByTimeOrScore(p)
+	} else {
+		// 根据社区id查询
+		zap.L().Info("根据社区id进行查询", zap.Any("社区id", p.CommunityID))
+		data, err = GetCommunityPostList(p)
+	}
+
+	if err != nil {
+		zap.L().Error("GetPostListNew failed", zap.Error(err))
+		return nil, err
+	}
+	return
+}
+
+// GetPostListByTimeOrScore 查询帖子列表，可以根据时间顺序或者得分顺序
+func GetPostListByTimeOrScore(p *models.ParamPostList) (data []*models.ApiPostDetail, err error) {
+	// 1.去redis查询id列表
 	ids, err := redis.GetPostIDsInOrder(p)
 	if err != nil {
 		return
@@ -101,8 +124,28 @@ func GetPostList2(p *models.ParamPostList) (data []*models.ApiPostDetail, err er
 		return
 	}
 
-	// 3.根据id去MySQL数据库查询帖子详细信息
-	// 返回的数据还要按照我给定的顺序返回
+	// 2.根据id去MySQL数据库查询帖子详细信息，返回的数据还要按照我给定的顺序返回
+	return getPostListDetailByIds(ids)
+}
+
+// GetCommunityPostList 根据社区查询帖子列表
+func GetCommunityPostList(p *models.ParamPostList) (data []*models.ApiPostDetail, err error) {
+	// 1.去redis中查找该社区的 id 列表
+	ids, err := redis.GetCommunityPostIDsInOrder(p)
+	if err != nil {
+		return
+	}
+	if len(ids) == 0 {
+		zap.L().Warn("redis.GetCommunityPostIDsInOrder(p) return 0 data")
+		return
+	}
+	// 2.根据id去MySQL数据库查询帖子详细信息，返回的数据还要按照我给定的顺序返回
+	return getPostListDetailByIds(ids)
+}
+
+// getPostListDetailByIds 根据id去MySQL数据库查询帖子详细信息，返回的数据还要按照我给定的顺序返回
+func getPostListDetailByIds(ids []string) (data []*models.ApiPostDetail, err error) {
+
 	posts, err := mysql.GetPostListByIDs(ids)
 	if err != nil {
 		return
@@ -110,8 +153,7 @@ func GetPostList2(p *models.ParamPostList) (data []*models.ApiPostDetail, err er
 
 	// 提前查询好每篇帖子的投票数
 	voteData, err := redis.GetPostVoteData(ids)
-	zap.L().Debug("GetPostList2", zap.Any("id情况", ids))
-	zap.L().Debug("GetPostList2", zap.Any("投票情况", voteData))
+
 	if err != nil {
 		return
 	}
@@ -142,6 +184,5 @@ func GetPostList2(p *models.ParamPostList) (data []*models.ApiPostDetail, err er
 		}
 		data = append(data, postDetail)
 	}
-
 	return
 }

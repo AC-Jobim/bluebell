@@ -3,6 +3,7 @@ module bluebell
 go 1.14
 
 require (
+	github.com/adeven/go-wrk v0.0.0-20200418124433-63e11dd31fef // indirect
 	github.com/bwmarrin/snowflake v0.3.0
 	github.com/cosmtrek/air v1.29.0 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
